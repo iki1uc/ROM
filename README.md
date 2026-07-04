@@ -1,7 +1,7 @@
-# ROM — Axiomatische Speicher-Ableitung
+# ROM — Axiomatische Hardware- und Speicher-Ableitung
 
-ROM ist ein Hardware-Modul, das seine Leistung nicht selbst erzeugt,
-sondern aus drei gegebenen Axiomen abgeleitet wird:
+ROM ist ein abgeleitetes Hardware- und Speichermodul. Es erzeugt keine eigene Leistung,
+sondern übernimmt Power aus drei gegebenen Axiomen:
 
 1. RAM
 2. CPU
@@ -10,6 +10,14 @@ sondern aus drei gegebenen Axiomen abgeleitet wird:
 Diese drei Module gelten im System als axiome Grundwerte.
 Wenn alle drei aktiv sind, kann ROM daraus seine Leistung ableiten
 und als BENCH-Wert weiterreichen.
+
+ROM kombiniert dabei zwei Ebenen:
+
+- **Hardware-Ableitung** (neuere, funktionalere Ebene)
+- **Speicher-Ableitung** (ältere, grundlegende Ebene)
+
+Die Hardware-Ableitung ist maßgeblich und überschreibt die ältere Speicher-Ableitung,
+bleibt aber vollständig kompatibel.
 
 ## Axiomatische Grundlage
 
@@ -20,7 +28,7 @@ RAM, CPU und GPU liefern jeweils vier Wertigkeiten:
 - GPU → FRONT / DEPTH / FLOW / CORE
 
 ROM übernimmt diese Wertigkeiten nicht direkt,
-sondern bildet daraus eine neutrale Hardware-Ableitung.
+sondern bildet daraus eine neutrale Hardware-Speicher-Ableitung.
 
 ## ROM-Wertigkeiten
 
@@ -87,7 +95,7 @@ rom.js
 ------
 rom.js steuert:
 
-- Ableitung aus RAM/CPU/GPU
+- Ableitung aus RAM/CPU/GGPU
 - ROM-Wertigkeiten
 - BENCH-Berechnung
 - Modi (1all/4all)
@@ -106,4 +114,3 @@ ROM = {
 
 Alle Werte stammen aus der Interaktion der drei Axiome:
 RAM, CPU, GPU.
-
