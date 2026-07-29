@@ -1,116 +1,68 @@
-# ROM — Axiomatische Hardware- und Speicher-Ableitung
+# IKI1UC · ROM — Axiomatische Hardware- und Speicher-Ableitung
 
-ROM ist ein abgeleitetes Hardware- und Speichermodul. Es erzeugt keine eigene Leistung,
-sondern übernimmt Power aus drei gegebenen Axiomen:
+ROM ist ein abgeleitetes Hardware- und Speichermodul innerhalb des IKI1UC‑Systems.  
+Es erzeugt keine eigene Leistung, sondern übernimmt Power aus drei Axiomen:
 
-1. RAM
-2. CPU
-3. GPU
+1. **RAM**  
+2. **CPU**  
+3. **GPU**
 
-Diese drei Module gelten im System als axiome Grundwerte.
-Wenn alle drei aktiv sind, kann ROM daraus seine Leistung ableiten
-und als BENCH-Wert weiterreichen.
+Diese drei Axiome liefern die Basisenergie, die ROM in strukturierte Speicher‑ und Hardware‑Funktionen überführt.
 
-ROM kombiniert dabei zwei Ebenen:
+---
 
-- **Hardware-Ableitung** (neuere, funktionalere Ebene)
-- **Speicher-Ableitung** (ältere, grundlegende Ebene)
+## 🔹 Zweck von ROM
 
-Die Hardware-Ableitung ist maßgeblich und überschreibt die ältere Speicher-Ableitung,
-bleibt aber vollständig kompatibel.
+ROM dient als:
 
-## Axiomatische Grundlage
+- stabiler, nicht‑volatiler Speicher  
+- Hardware‑Anker für feste Systemwerte  
+- Grundlage für EVO (erweiterte Runtime)  
+- Basis für WHIRL‑Core‑Initialisierung  
+- Quelle für feste Achsen und System‑Konstanten
 
-RAM, CPU und GPU liefern jeweils vier Wertigkeiten:
+---
 
-- RAM → BLOCK / CACHE / FLOW / STATE
-- CPU → LOAD / CYCLE / ENERGY / STATE
-- GPU → FRONT / DEPTH / FLOW / CORE
+## 🔹 EVO — Erweiterte Runtime
 
-ROM übernimmt diese Wertigkeiten nicht direkt,
-sondern bildet daraus eine neutrale Hardware-Speicher-Ableitung.
+EVO ist die Weiterentwicklung von ROM und verbindet:
 
-## ROM-Wertigkeiten
+- **ID-System**  
+- **WHIRL-Core**  
+- **Pipeline**  
+- **PQ (Parallel Queue)**  
+- **RESPO (Response Flow)**  
+- **NC (Node Connector)**  
+- **TMP (Achsen-Speicher)**  
 
-ROM erzeugt vier abgeleitete Werte:
+Die Datei `index.html` zeigt alle Module live.
 
-1. READ   – Lesefähigkeit
-2. WRITE  – Schreibfähigkeit
-3. HOLD   – Stabilität / Halt
-4. BENCH  – Gesamtleistung
+---
 
-BENCH ist der kombinierte Leistungswert aus RAM + CPU + GPU.
+## 🔹 index.html — System Runtime Viewer
 
-## Funktionen
+Die Runtime zeigt:
 
-ROM führt folgende Aufgaben aus:
+- ID-Modus  
+- WHIRL-Core  
+- PQ_HISTORY  
+- RESPO_LOG  
+- NC_LOG  
+- TMP-Achsen  
 
-- READ-Control  – Zugriff auf gespeicherte Werte
-- WRITE-Control – Schreiben von abgeleiteten Werten
-- HOLD-Control  – Stabilisierung der Hardware-Ableitung
-- BENCH-Control – Berechnung der Gesamtleistung
+Die Pipeline wird durch Eingabe + ENTER ausgeführt.
 
-## Ressourcen
+---
 
-ROM nutzt geschätzte Systemwerte:
+## 🔹 Dateien
 
-- ROM-Größe: 8192 MB
-- ROM-Speed: 4 Gbps
-- CORE-Level: 2
-- STEP_A: Read-Schritt
-- STEP_B: Write-Schritt
+- `README.md`  
+- `index.html`  
+- `ID.html` (System-ID)  
+- weitere Module optional
 
-## Systemwerte
+---
 
-ROM übernimmt globale Werte:
+## 🔹 Lizenz
 
-- GATE: GATE_11
-- EICH: EICH_03
-- KETTE: KETTE_44
-- CLUSTER: 44~44(1)
-
-## Modi
-
-ROM unterstützt zwei Betriebsmodi:
-
-- 1all  – Einzelzyklus
-- 4all  – Vierfach-Zyklus
-
-Beide Modi steuern die Geschwindigkeit der Ableitung.
-
-## Dateien
-
-index.html
-----------
-Die Oberfläche besteht aus vier Feldern:
-
-- READ
-- WRITE
-- HOLD
-- BENCH
-
-Alle Felder aktualisieren synchron.
-
-rom.js
-------
-rom.js steuert:
-
-- Ableitung aus RAM/CPU/GGPU
-- ROM-Wertigkeiten
-- BENCH-Berechnung
-- Modi (1all/4all)
-- Systemwerte
-
-## RAW-Abbildung
-
-ROM kann als RAW-Objekt dargestellt werden:
-
-ROM = {
-  read:  <wert>,
-  write: <wert>,
-  hold:  <wert>,
-  bench: <wert>
-}
-
-Alle Werte stammen aus der Interaktion der drei Axiome:
-RAM, CPU, GPU.
+Freie Nutzung innerhalb iki1uc‑Systemen.
