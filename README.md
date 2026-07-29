@@ -133,7 +133,108 @@ Die Pipeline wird durch Eingabe + ENTER ausgeführt.
 - `index.html`  
 - `ID.html` (System-ID)  
 - weitere Module optional
+🔹 ROM in der IQQ‑Pipeline (Axiom‑12)
+ROM ist die Endstation der IKI1UC‑Pipeline und speichert alle stabilisierten WHIRL‑Frames, die durch die Runtime erzeugt werden.
 
+Die vollständige Pipeline lautet:
+
+ID-System
+
+WHIRL-Core
+
+TMP-Achsen
+
+PQ (Parallel Queue)
+
+RESPO (Response Flow)
+
+NC (Node Connector)
+
+ROM (Archiv / Axiom‑12)
+
+ROM archiviert jeden WHIRL‑Frame als strukturiertes Objekt:
+
+json
+{
+  "frame": { ... },
+  "stamp": 1720000000000
+}
+Damit ist ROM die finale Hardware‑Achse,
+die alle stabilisierten Systemwerte dauerhaft speichert.
+
+🔹 ROM als Archiv‑Modul
+ROM nutzt ein stabiles Archivformat:
+
+jeder WHIRL‑Frame wird gespeichert
+
+jeder Frame erhält einen Zeitstempel
+
+ROM_FRAMES bildet die vollständige Archiv‑Historie
+
+ROM dient als Endlager für alle stabilisierten Achsen
+
+Archivfunktion:
+
+js
+ROM_Store(frame)
+Diese Funktion wird automatisch durch die Pipeline ausgelöst.
+
+🔹 ROM als Runtime‑Achse
+ROM ist nicht nur Speicher — es ist Teil der EVO‑Runtime.
+
+ROM interagiert direkt mit:
+
+ID.set(mode)
+
+ID.system(whirl)
+
+WHIRL(v)
+
+TMP_Whirl(w)
+
+PQ_PC_Parallel(w)
+
+RESPO_Whirl(w)
+
+NC_link_Whirl(w)
+
+PIPELINE_LOAD(input)
+
+ROM speichert den finalen WHIRL‑Frame jeder Pipeline‑Ausführung.
+
+🔹 ROM in index.html
+Die Datei index.html zeigt ROM live:
+
+WHIRL‑Frames
+
+PQ‑History
+
+RESPO‑Flow
+
+NC‑Links
+
+TMP‑Achsen
+
+ROM‑Archiv
+
+Die Pipeline wird durch Eingabe + ENTER ausgeführt.
+
+🔹 ROM als Axiom‑12
+ROM ist die axiomatische Endstation des Systems:
+
+stabil
+
+nicht‑volatil
+
+deterministisch
+
+final
+
+archivierend
+
+systemtragend
+
+ROM bewahrt alle stabilisierten Werte, die durch die Runtime erzeugt werden.
 ---
 
 ## 🔹 Lizenz
