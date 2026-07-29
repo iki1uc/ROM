@@ -3,7 +3,74 @@
   "frame": { ... },
   "stamp": 1720000000000
 }
+ROM_Store(frame)
+ROM nutzt ein einfaches, aber axiomatisch stabiles Archivformat:
 
+jeder WHIRL‑Frame wird gespeichert
+
+jeder Frame erhält einen Zeitstempel
+
+ROM_FRAMES bildet die vollständige Archiv‑Historie
+
+ROM dient als Endlager für alle stabilisierten Achsen
+
+Die Archivfunktion lautet:
+🔹 ROM als Runtime‑Achse
+ROM ist nicht nur Speicher — es ist Teil der EVO‑Runtime.
+
+ROM interagiert direkt mit:
+
+ID.set(mode)
+
+ID.system(whirl)
+
+WHIRL(v)
+
+TMP_Whirl(w)
+
+PQ_PC_Parallel(w)
+
+RESPO_Whirl(w)
+
+NC_link_Whirl(w)
+
+PIPELINE_LOAD(input)
+
+ROM speichert den finalen WHIRL‑Frame jeder Pipeline‑Ausführung.
+
+🔹 ROM in index.html
+Die Datei index.html zeigt ROM live:
+
+WHIRL‑Frames
+
+PQ‑History
+
+RESPO‑Flow
+
+NC‑Links
+
+TMP‑Achsen
+
+ROM‑Archiv
+
+Die Pipeline wird durch Eingabe + ENTER ausgeführt.
+
+🔹 ROM als Axiom‑12
+ROM ist die axiomatische Endstation des Systems:
+
+stabil
+
+nicht‑volatil
+
+deterministisch
+
+final
+
+archivierend
+
+systemtragend
+
+ROM bewahrt alle stabilisierten Werte, die durch die Runtime erzeugt werden.
 
 
 ROM ist ein abgeleitetes Hardware- und Speichermodul innerhalb des IKI1UC‑Systems.  
