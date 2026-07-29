@@ -1,4 +1,10 @@
 # IKI1UC · ROM — Axiomatische Hardware- und Speicher-Ableitung
+{
+  "frame": { ... },
+  "stamp": 1720000000000
+}
+
+
 
 ROM ist ein abgeleitetes Hardware- und Speichermodul innerhalb des IKI1UC‑Systems.  
 Es erzeugt keine eigene Leistung, sondern übernimmt Power aus drei Axiomen:
