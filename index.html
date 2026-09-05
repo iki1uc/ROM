@@ -1,107 +1,922 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<title>IKI1UC · ROM · Axiom‑12 · Archiv</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌀 RESPO‑SCHALTUNG · 2 ARBEITSBEREICHE · NO END</title>
 
-<style>
-body { background:#000; color:#0ff; font-family:Consolas; padding:20px; }
-h1 { color:#6cf; }
-h2 { color:#0f0; margin-top:30px; }
-pre { background:#111; padding:12px; border:1px solid #333; border-radius:6px; }
-#input { width:400px; padding:10px; background:#111; color:#0f0; border:1px solid #333; }
-button { margin:5px; padding:10px; background:#111; color:#0f0; border:1px solid #333; }
-</style>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-<script type="module">
-import {
-    ID,
-    WHIRL,
-    TMP_Whirl,
-    PQ_PC_Parallel,
-    RESPO_Whirl,
-    NC_link_Whirl,
-    PIPELINE_LOAD
-} from "./IQQ.js";
-
-// =========================
-// ROM (Archiv)
-// =========================
-
-const ROM_FRAMES = [];
-
-function ROM_Store(frame){
-    ROM_FRAMES.push({
-        frame,
-        stamp: Date.now()
-    });
-    return ROM_FRAMES;
-}
-
-// =========================
-// UI / Pipeline
-// =========================
-
-document.addEventListener("keydown", e => {
-    if(e.key === "Enter"){
-        const text = document.getElementById("input").value;
-
-        // Pipeline aus IQQ.js
-        const out = PIPELINE_LOAD(text);
-
-        // ROM Archiv
-        const romFrame = ROM_Store(out.whirl);
-
-        // UI Ausgabe
-        document.getElementById("id").textContent = ID.info();
-        document.getElementById("whirl").textContent = JSON.stringify(out.whirl, null, 2);
-        document.getElementById("pq").textContent = JSON.stringify(PQ_HISTORY, null, 2);
-        document.getElementById("respo").textContent = JSON.stringify(RESPO_LOG, null, 2);
-        document.getElementById("nc").textContent = JSON.stringify(NC_LOG, null, 2);
-        document.getElementById("tmp").textContent = JSON.stringify(TMP, null, 2);
-        document.getElementById("rom").textContent = JSON.stringify(ROM_FRAMES, null, 2);
+    body {
+      background: radial-gradient(ellipse at 20% 30%, #0a0e1a, #000000);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', 'Consolas', monospace;
+      padding: 10px;
+      color: #c0d0d0;
     }
-});
 
-window.setID = function(mode){
-    ID.set(mode);
-    document.getElementById("id").textContent = ID.info();
-};
-</script>
+    .container {
+      max-width: 1600px;
+      width: 100%;
+      background: rgba(6, 8, 16, 0.6);
+      backdrop-filter: blur(4px);
+      border-radius: 40px;
+      padding: 18px 22px 24px;
+      border: 1px solid rgba(160, 200, 240, 0.05);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), inset 0 0 80px rgba(100, 180, 255, 0.02);
+    }
 
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(160, 200, 240, 0.06);
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+    .header h1 {
+      font-size: 22px;
+      font-weight: 300;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, #e0e8f0, #b0c8d8, #8098b0, #c0d8e8, #b388ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header h1 small {
+      font-size: 10px;
+      letter-spacing: 2px;
+      -webkit-text-fill-color: #4a5a6a;
+      color: #4a5a6a;
+    }
+    .status-leds {
+      display: flex;
+      gap: 14px;
+      font-size: 10px;
+      color: #5a7a8a;
+      flex-wrap: wrap;
+    }
+    .status-leds span { display: flex; align-items: center; gap: 4px; }
+    .led {
+      display: inline-block; width: 8px; height: 8px;
+      border-radius: 50%; background: #2a4a5a; transition: 0.3s;
+    }
+    .led.on   { background: #8cf0d0; box-shadow: 0 0 10px #8cf0d0; }
+    .led.pulse{ background: #f0d080; animation: pulse 1.2s infinite; }
+    .led.off  { background: #2a4a5a; }
+    @keyframes pulse { 0%,100%{opacity:0.4;transform:scale(0.8)} 50%{opacity:1;transform:scale(1.2)} }
+
+    /* ===== ZWEI ARBEITSBEREICHE ===== */
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 8px 0 14px;
+    }
+    @media (max-width: 1100px) {
+      .work-grid { grid-template-columns: 1fr; }
+    }
+
+    .workspace {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 20px;
+      padding: 12px 14px 14px;
+      border: 1px solid rgba(100, 180, 255, 0.03);
+      display: flex;
+      flex-direction: column;
+      min-height: 420px;
+    }
+    .workspace h3 {
+      font-size: 11px;
+      letter-spacing: 2px;
+      border-bottom: 1px solid rgba(100, 180, 255, 0.04);
+      padding-bottom: 4px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .workspace h3 .badge {
+      font-weight: normal;
+      color: #5a7a8a;
+      font-size: 9px;
+    }
+    .ws-left h3 { color: #f0d080; }
+    .ws-right h3 { color: #b388ff; }
+
+    /* ---- LINKER BEREICH: MODUL-SCHALTER ---- */
+    .grid-3x3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      flex: 1;
+    }
+    @media (max-width: 600px) {
+      .grid-3x3 { grid-template-columns: repeat(2, 1fr); }
+    }
+    .modul {
+      background: rgba(10, 14, 20, 0.5);
+      border: 1px solid rgba(100, 180, 255, 0.06);
+      border-radius: 12px;
+      padding: 8px 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .modul:hover { border-color: rgba(160, 200, 240, 0.12); transform: translateY(-1px); }
+    .modul .icon { font-size: 22px; line-height: 1.1; }
+    .modul .name { font-size: 10px; font-weight: 500; color: #d0e0e8; }
+    .modul .status-tag {
+      font-size: 6px; padding: 1px 8px; border-radius: 10px;
+      margin: 2px 0 3px; background: rgba(0,0,0,0.2);
+      border: 1px solid transparent; display: inline-block;
+    }
+    .modul .status-tag.stabil { border-color: #8cf0d0; color: #8cf0d0; }
+    .modul .status-tag.beta   { border-color: #f0d080; color: #f0d080; }
+    .modul .status-tag.alpha  { border-color: #ff6b6b; color: #ff6b6b; }
+    .modul .messwert { font-size: 10px; color: #70c8ff; font-weight: bold; }
+    .modul .toggle-switch {
+      display: inline-block;
+      width: 24px; height: 12px;
+      background: #1a2a3a;
+      border-radius: 30px;
+      position: relative;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid rgba(100,180,255,0.05);
+      margin-top: 2px;
+    }
+    .modul .toggle-switch .knob {
+      width: 8px; height: 8px;
+      background: #4a6a7a;
+      border-radius: 50%;
+      position: absolute;
+      top: 1px; left: 2px;
+      transition: 0.25s;
+    }
+    .modul .toggle-switch.on { background: #1a4a3a; border-color: #8cf0d0; }
+    .modul .toggle-switch.on .knob { left: 13px; background: #8cf0d0; box-shadow: 0 0 8px #8cf0d0; }
+    .modul.ausgewaehlt { border-color: #f0d080; box-shadow: 0 0 16px rgba(255,215,0,0.06); }
+    .conn-bar {
+      font-size: 7px; color: #445555; margin-top: 2px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .conn-bar .conn { color: #70c8ff; }
+
+    .ws-left .footer-stats {
+      display: flex;
+      gap: 14px;
+      font-size: 9px;
+      color: #5a7a8a;
+      margin-top: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ---- RECHTER BEREICH: FLUID-SIMULATION ---- */
+    .ws-right .canvas-wrap {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #030508;
+      border: 1px solid rgba(100, 180, 255, 0.04);
+      aspect-ratio: 16 / 10;
+      width: 100%;
+      min-height: 200px;
+      flex-shrink: 0;
+    }
+    .ws-right .canvas-wrap canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .ws-right .sim-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin: 6px 0 4px;
+    }
+    .ws-right .sim-controls button {
+      background: rgba(20, 28, 36, 0.4);
+      border: 1px solid rgba(120, 160, 190, 0.06);
+      color: #9ab0c0;
+      padding: 3px 10px;
+      border-radius: 16px;
+      font-size: 8px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .ws-right .sim-controls button:hover {
+      background: rgba(40, 70, 90, 0.2);
+      border-color: rgba(160, 200, 240, 0.1);
+      color: #d0e8f8;
+    }
+    .ws-right .sim-controls button.primary {
+      border-color: rgba(255, 215, 0, 0.1);
+      color: #f0d080;
+    }
+    .ws-right .sim-controls button.nc {
+      border-color: rgba(68, 255, 68, 0.1);
+      color: #4f4;
+    }
+    .ws-right .sim-controls button.danger {
+      border-color: rgba(255, 80, 80, 0.08);
+      color: #d06060;
+    }
+
+    /* ---- GLOBALE SLIDER ---- */
+    .slider-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin: 6px 0 10px;
+    }
+    @media (max-width: 700px) {
+      .slider-row { grid-template-columns: 1fr; gap: 6px; }
+    }
+    .slider-item { display: flex; flex-direction: column; gap: 2px; }
+    .slider-item .label { display: flex; justify-content: space-between; font-size: 10px; color: #5a7a8a; }
+    .slider-item .label .wert { color: #c0d8e8; font-weight: bold; }
+    .slider-item input[type="range"] {
+      width: 100%; height: 4px;
+      -webkit-appearance: none; appearance: none;
+      background: #1a2a3a; border-radius: 4px; outline: none;
+    }
+    .slider-item input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 14px; height: 14px;
+      border-radius: 50%; background: #70c8ff; cursor: pointer;
+      box-shadow: 0 0 10px rgba(100,200,255,0.15);
+    }
+
+    /* ---- LOG ---- */
+    .log-box {
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 7px;
+      color: #4a5a6a;
+      max-height: 50px;
+      overflow-y: auto;
+      line-height: 1.4;
+      border: 1px solid rgba(100, 180, 255, 0.02);
+      margin-top: 4px;
+      font-family: 'Consolas', monospace;
+      flex-shrink: 0;
+    }
+    .log-box .entry { border-bottom: 1px solid rgba(100,180,255,0.02); padding: 1px 0; }
+    .log-box .time { color: #2a3a4a; }
+    .log-box .msg { color: #8ab0c0; }
+    .log-box .msg.grav { color: #b388ff; }
+    .log-box .msg.conn { color: #70c8ff; }
+    .log-box .msg.fluid { color: #6cf; }
+
+    .footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 10px;
+      padding: 4px 12px;
+      background: rgba(0,0,0,0.12);
+      border-radius: 12px;
+      border: 1px solid rgba(100,180,255,0.02);
+      font-size: 8px;
+      color: #3a4a5a;
+    }
+    .footer .gold { color: #f0d080; }
+    .footer .stat { display: flex; align-items: center; gap: 4px; }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: #080c12; }
+    ::-webkit-scrollbar-thumb { background: #1a2a3a; border-radius: 4px; }
+  </style>
 </head>
-
 <body>
 
-<h1>IKI1UC · ROM · Axiom‑12 · Archiv</h1>
+<div class="container">
 
-<h2>ID-Modus</h2>
-<button onclick="setID('koop')">KOOP</button>
-<button onclick="setID('neutral')">NEUTRAL</button>
-<button onclick="setID('pook')">POOK</button>
+  <div class="header">
+    <h1>🧿 RESPO‑SCHALTUNG <small>2 ARBEITSBEREICHE · NO END</small></h1>
+    <div class="status-leds">
+      <span><span class="led on" id="ledSystem"></span> SYSTEM</span>
+      <span><span class="led pulse" id="ledSim"></span> SIMULATION</span>
+      <span><span class="led" id="ledConn"></span> VERBINDUNG</span>
+      <span><span class="led" id="ledFluid"></span> FLUID</span>
+    </div>
+  </div>
 
-<pre id="id">Neutral</pre>
+  <!-- GLOBALE SLIDER -->
+  <div class="slider-row">
+    <div class="slider-item">
+      <div class="label"><span>⚙️ ACHSE</span><span class="wert" id="wertAchse">50</span></div>
+      <input type="range" id="sliderAchse" min="0" max="100" value="50">
+    </div>
+    <div class="slider-item">
+      <div class="label"><span>💧 FLUID</span><span class="wert" id="wertFluid">50</span></div>
+      <input type="range" id="sliderFluid" min="0" max="100" value="50">
+    </div>
+    <div class="slider-item">
+      <div class="label"><span>★ DS9</span><span class="wert" id="wertDs9">50</span></div>
+      <input type="range" id="sliderDs9" min="0" max="100" value="50">
+    </div>
+  </div>
 
-<h2>Input</h2>
-<input id="input" placeholder="ENTER → Pipeline Load">
+  <!-- ZWEI ARBEITSBEREICHE -->
+  <div class="work-grid">
 
-<h2>WHIRL-Core</h2>
-<pre id="whirl">Noch kein WHIRL</pre>
+    <!-- LINKER BEREICH: MODUL-SCHALTER -->
+    <div class="workspace ws-left">
+      <h3>🔷 SCHALTER · 9 MODULE <span class="badge">🔗 <span id="connCount">0</span></span></h3>
+      <div class="grid-3x3" id="modulGrid"></div>
+      <div class="footer-stats">
+        <span>📊 <span id="footerActive">0</span>/9 aktiv</span>
+        <span>🔗 <span id="footerConns">0</span></span>
+        <span>⚡ <span id="footerScore">0</span></span>
+      </div>
+      <div class="log-box" id="logBoxLeft">
+        <div class="entry"><span class="time">[INIT]</span> <span class="msg conn">Schaltung geladen · 9 Module</span></div>
+      </div>
+    </div>
 
-<h2>PQ_HISTORY</h2>
-<pre id="pq">[]</pre>
+    <!-- RECHTER BEREICH: FLUID-SIMULATION -->
+    <div class="workspace ws-right">
+      <h3>🌀 FLUID‑SIMULATION <span class="badge" id="simStatus">● läuft</span></h3>
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="fluidCanvas"></canvas>
+      </div>
+      <div class="sim-controls">
+        <button class="primary" id="btnSimStart">⏸ STOP</button>
+        <button id="btnAddDrop">💧 TROPFEN +</button>
+        <button id="btnSplitDrop">✂ SPLIT</button>
+        <button id="btnQuake">⚡ QUAKE</button>
+        <button class="nc" id="btnToggleMagnet">🧲 MAGNET</button>
+        <button class="danger" id="btnSimReset">⟲ RESET</button>
+      </div>
+      <div class="log-box" id="logBoxRight">
+        <div class="entry"><span class="time">[INIT]</span> <span class="msg fluid">Fluid‑Engine bereit · echte Physik</span></div>
+      </div>
+    </div>
 
-<h2>RESPO_LOG</h2>
-<pre id="respo">[]</pre>
+  </div>
 
-<h2>NC_LOG</h2>
-<pre id="nc">[]</pre>
+  <div class="footer">
+    <span class="stat"><span class="gold">★</span> 2 Arbeitsbereiche · 9 Module · Fluid‑Physik</span>
+    <span class="stat">⌨️  1=Toggle  space=Drop  s=Split  q=Quake  m=Magnet  x=Reset</span>
+    <span class="stat">📊 Score: <span id="footerScore2">0</span></span>
+  </div>
 
-<h2>TMP-Achsen</h2>
-<pre id="tmp">Noch keine Achsen</pre>
+</div>
 
-<h2>ROM Archiv</h2>
-<pre id="rom">Noch keine Frames</pre>
+<script>
+// ================================================================
+//  RESPO‑SCHALTUNG · 2 ARBEITSBEREICHE · NO END
+//  Linke Seite: Modul-Schalter (9 Module, Verbindungen)
+//  Rechte Seite: Fluid-Simulation (Quicksilver-Physik)
+//  Slider steuern beide Bereiche
+// ================================================================
 
+"use strict";
+
+// ─── 1. MODUL-CONFIG (endlos erweiterbar) ──────────────────────
+const MODULE_CONFIG = [
+  { id: 'api',   icon: '🔌', name: 'API',   status: 'stabil', min: 40, spread: 60 },
+  { id: 'aura',  icon: '✨', name: 'AURA',  status: 'beta',   min: 30, spread: 70 },
+  { id: 'cpu',   icon: '💻', name: 'CPU',   status: 'stabil', min: 10, spread: 90 },
+  { id: 'down',  icon: '⬇️', name: 'DOWN',  status: 'stabil', min: 20, spread: 80 },
+  { id: 'mana',  icon: '🪄', name: 'MANA',  status: 'alpha',  min: 50, spread: 50 },
+  { id: 'rom3',  icon: '💾', name: 'ROM.3', status: 'beta',   min: 10, spread: 90 },
+  { id: 'rom9',  icon: '💿', name: 'ROM.9', status: 'beta',   min: 10, spread: 90 },
+  { id: 'up',    icon: '⬆️', name: 'UP',    status: 'stabil', min: 20, spread: 80 },
+  { id: 'zen',   icon: '🧘', name: 'ZEN',   status: 'alpha',  min: 40, spread: 60 }
+];
+
+// ─── 2. STATE (Modul) ──────────────────────────────────────────
+const modState = {
+  status: {},          // id -> boolean
+  messwerte: {},       // id -> Zahl
+  connections: [],     // [{a, b}]
+  selected: null,
+  params: { achse: 50, fluid: 50, ds9: 50 },
+  score: 0
+};
+
+MODULE_CONFIG.forEach(m => {
+  modState.status[m.id] = true;
+  modState.messwerte[m.id] = m.min + Math.random() * m.spread;
+});
+
+// ─── 3. STATE (Fluid-Simulation) ──────────────────────────────
+const fluidState = {
+  running: true,
+  drops: [],
+  mergeCount: 0,
+  splitCount: 0,
+  magnetOn: false,
+  ds9On: false,
+  gravStrength: 0.5,
+  mouse: { x: -1000, y: -1000, active: false },
+  MAX_DROPS: 60,
+  GRAVITY: 0.25,
+  DAMP: 0.986,
+  WALL_BOUNCE: 0.55,
+  MAGNET_STRENGTH: 0.9,
+  MERGE_FACTOR: 0.6,
+  REPEL_FACTOR: 0.015,
+  MIN_SPLIT_R: 15
+};
+
+// ─── 4. DOM-REFERENZEN ─────────────────────────────────────────
+const dom = {
+  modulGrid: document.getElementById('modulGrid'),
+  connCount: document.getElementById('connCount'),
+  footerActive: document.getElementById('footerActive'),
+  footerConns: document.getElementById('footerConns'),
+  footerScore: document.getElementById('footerScore'),
+  footerScore2: document.getElementById('footerScore2'),
+  ledSystem: document.getElementById('ledSystem'),
+  ledSim: document.getElementById('ledSim'),
+  ledConn: document.getElementById('ledConn'),
+  ledFluid: document.getElementById('ledFluid'),
+  simStatus: document.getElementById('simStatus'),
+  logLeft: document.getElementById('logBoxLeft'),
+  logRight: document.getElementById('logBoxRight'),
+  canvas: document.getElementById('fluidCanvas'),
+  btnSimStart: document.getElementById('btnSimStart')
+};
+const ctx = dom.canvas.getContext('2d');
+let W = 0, H = 0;
+
+// ─── 5. CANVAS-SETUP ────────────────────────────────────────────
+function resizeCanvas() {
+  const rect = dom.canvas.parentElement.getBoundingClientRect();
+  dom.canvas.width = rect.width;
+  dom.canvas.height = rect.height;
+  W = dom.canvas.width;
+  H = dom.canvas.height;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+// ─── 6. FLUID-PHYSIK (Quicksilver-Engine) ──────────────────────
+class Drop {
+  constructor(x, y, r, vx = 0, vy = 0) {
+    this.x = x; this.y = y; this.r = r; this.vx = vx; this.vy = vy;
+  }
+}
+
+function spawnDrop(x, y, r) {
+  if (fluidState.drops.length >= fluidState.MAX_DROPS) return null;
+  const d = new Drop(x, y, r, (Math.random() - 0.5) * 1.5, (Math.random() - 0.5) * 1.5);
+  fluidState.drops.push(d);
+  return d;
+}
+
+function initDrops(count = 12) {
+  fluidState.drops = [];
+  fluidState.mergeCount = 0;
+  fluidState.splitCount = 0;
+  for (let i = 0; i < count; i++) {
+    spawnDrop(
+      40 + Math.random() * (W - 80),
+      20 + Math.random() * (H * 0.4),
+      10 + Math.random() * 18
+    );
+  }
+}
+
+function stepPhysics() {
+  const fs = fluidState;
+  const drops = fs.drops;
+  const mouse = fs.mouse;
+
+  for (const d of drops) {
+    if (fs.magnetOn && mouse.active) {
+      const dx = mouse.x - d.x, dy = mouse.y - d.y;
+      const dist = Math.hypot(dx, dy) || 1;
+      d.vx += (dx / dist) * fs.MAGNET_STRENGTH * 0.4;
+      d.vy += (dy / dist) * fs.MAGNET_STRENGTH * 0.4;
+    } else {
+      d.vy += fs.GRAVITY * fs.gravStrength * 0.8;
+    }
+    d.vx *= fs.DAMP;
+    d.vy *= fs.DAMP;
+    d.x += d.vx;
+    d.y += d.vy;
+
+    if (d.x - d.r < 0) { d.x = d.r; d.vx *= -fs.WALL_BOUNCE; }
+    if (d.x + d.r > W) { d.x = W - d.r; d.vx *= -fs.WALL_BOUNCE; }
+    if (d.y - d.r < 0) { d.y = d.r; d.vy *= -fs.WALL_BOUNCE; }
+    if (d.y + d.r > H) { d.y = H - d.r; d.vy *= -fs.WALL_BOUNCE; }
+  }
+
+  // Verschmelzung / Abstoßung
+  const toRemove = new Set();
+  let mergedThisFrame = 0;
+  for (let i = 0; i < drops.length; i++) {
+    if (toRemove.has(i)) continue;
+    for (let j = i + 1; j < drops.length; j++) {
+      if (toRemove.has(j)) continue;
+      const a = drops[i], b = drops[j];
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const dist = Math.hypot(dx, dy) || 0.001;
+      const sumR = a.r + b.r;
+
+      if (dist < sumR * fs.MERGE_FACTOR) {
+        const ma = a.r * a.r, mb = b.r * b.r, total = ma + mb;
+        a.x = (a.x * ma + b.x * mb) / total;
+        a.y = (a.y * ma + b.y * mb) / total;
+        a.vx = (a.vx * ma + b.vx * mb) / total;
+        a.vy = (a.vy * ma + b.vy * mb) / total;
+        a.r = Math.sqrt(total);
+        toRemove.add(j);
+        mergedThisFrame++;
+      } else if (dist < sumR) {
+        const overlap = sumR - dist;
+        const nx = dx / dist, ny = dy / dist;
+        const push = overlap * fs.REPEL_FACTOR;
+        a.vx -= nx * push; a.vy -= ny * push;
+        b.vx += nx * push; b.vy += ny * push;
+      }
+    }
+  }
+  if (toRemove.size) {
+    fluidState.drops = drops.filter((_, idx) => !toRemove.has(idx));
+    fluidState.mergeCount += mergedThisFrame;
+    logRight(`🔗 ${mergedThisFrame} Verschmelzung(en) · Masse erhalten`, 'conn');
+  }
+}
+
+function splitDrop(idx) {
+  const d = fluidState.drops[idx];
+  if (!d || d.r < fluidState.MIN_SPLIT_R || fluidState.drops.length >= fluidState.MAX_DROPS) return false;
+  const newR = d.r / Math.sqrt(2);
+  const angle = Math.random() * 2 * Math.PI;
+  const speed = 1.2 + Math.random() * 1.2;
+  const d1 = new Drop(
+    d.x - Math.cos(angle) * newR * 0.5,
+    d.y - Math.sin(angle) * newR * 0.5,
+    newR,
+    d.vx - Math.cos(angle) * speed,
+    d.vy - Math.sin(angle) * speed
+  );
+  const d2 = new Drop(
+    d.x + Math.cos(angle) * newR * 0.5,
+    d.y + Math.sin(angle) * newR * 0.5,
+    newR,
+    d.vx + Math.cos(angle) * speed,
+    d.vy + Math.sin(angle) * speed
+  );
+  fluidState.drops.splice(idx, 1, d1, d2);
+  fluidState.splitCount++;
+  return true;
+}
+
+function findDropAt(x, y) {
+  for (let i = fluidState.drops.length - 1; i >= 0; i--) {
+    if (Math.hypot(fluidState.drops[i].x - x, fluidState.drops[i].y - y) <= fluidState.drops[i].r) return i;
+  }
+  return -1;
+}
+
+// ─── 7. RENDER (Fluid) ──────────────────────────────────────────
+function renderFluid() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#05070c';
+  ctx.fillRect(0, 0, W, H);
+
+  const ds9On = fluidState.ds9On;
+
+  for (const d of fluidState.drops) {
+    const grad = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.r);
+    if (ds9On) {
+      grad.addColorStop(0, '#fff8e0');
+      grad.addColorStop(0.4, '#f0d080');
+      grad.addColorStop(1, '#8a7a4a');
+    } else {
+      grad.addColorStop(0, '#eaf4fb');
+      grad.addColorStop(0.5, '#a8c4d8');
+      grad.addColorStop(1, '#4a6a7a');
+    }
+    ctx.fillStyle = grad;
+    ctx.shadowColor = ds9On ? '#f0d080' : 'rgba(160,200,240,0.2)';
+    ctx.shadowBlur = ds9On ? 20 : 10;
+    ctx.beginPath();
+    ctx.arc(d.x, d.y, d.r, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // Highlight
+    const hx = d.x - d.r * 0.3, hy = d.y - d.r * 0.3, hr = d.r * 0.25;
+    const hg = ctx.createRadialGradient(hx, hy, 0, hx, hy, hr);
+    hg.addColorStop(0, ds9On ? 'rgba(255,240,200,0.8)' : 'rgba(255,255,255,0.6)');
+    hg.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = hg;
+    ctx.beginPath();
+    ctx.arc(hx, hy, hr, 0, 2 * Math.PI);
+    ctx.fill();
+  }
+
+  // Info
+  ctx.fillStyle = 'rgba(200,220,240,0.12)';
+  ctx.font = '7px monospace';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'bottom';
+  const mass = fluidState.drops.reduce((s, d) => s + d.r * d.r, 0);
+  ctx.fillText(`💧 ${fluidState.drops.length} · Σr² ${Math.round(mass)} · verschmolzen ${fluidState.mergeCount} · geteilt ${fluidState.splitCount}`, 10, H - 6);
+  ctx.textAlign = 'right';
+  ctx.fillText(`ATALARDAN · FLUID`, W - 10, H - 6);
+}
+
+// ─── 8. FLUID-UPDATE ────────────────────────────────────────────
+function updateFluid() {
+  if (!fluidState.running) return;
+  stepPhysics();
+  renderFluid();
+
+  // UI-Metriken
+  document.getElementById('ledFluid').className = 'led ' + (fluidState.running ? 'pulse' : 'off');
+  const mass = fluidState.drops.reduce((s, d) => s + d.r * d.r, 0);
+  document.getElementById('footerScore2').textContent = Math.round(mass);
+}
+
+// ─── 9. MODUL-UI ────────────────────────────────────────────────
+function getModuleName(id) {
+  const m = MODULE_CONFIG.find(x => x.id === id);
+  return m ? m.name : id;
+}
+
+function logLeft(msg, type = 'conn') {
+  const cls = ['conn', 'grav'].includes(type) ? type : 'conn';
+  const time = new Date().toLocaleTimeString();
+  dom.logLeft.innerHTML += `<div class="entry"><span class="time">[${time}]</span> <span class="msg ${cls}">${msg}</span></div>`;
+  dom.logLeft.scrollTop = dom.logLeft.scrollHeight;
+  while (dom.logLeft.children.length > 20) dom.logLeft.removeChild(dom.logLeft.firstChild);
+}
+
+function logRight(msg, type = 'fluid') {
+  const cls = ['fluid', 'conn'].includes(type) ? type : 'fluid';
+  const time = new Date().toLocaleTimeString();
+  dom.logRight.innerHTML += `<div class="entry"><span class="time">[${time}]</span> <span class="msg ${cls}">${msg}</span></div>`;
+  dom.logRight.scrollTop = dom.logRight.scrollHeight;
+  while (dom.logRight.children.length > 20) dom.logRight.removeChild(dom.logRight.firstChild);
+}
+
+function toggleModule(id) {
+  modState.status[id] = !modState.status[id];
+  const isOn = modState.status[id];
+  if (!isOn) {
+    modState.connections = modState.connections.filter(c => c.a !== id && c.b !== id);
+    if (modState.selected === id) modState.selected = null;
+    logLeft(`⛔ ${getModuleName(id)} aus · Verbindungen gelöscht`, 'conn');
+  } else {
+    const cfg = MODULE_CONFIG.find(m => m.id === id);
+    modState.messwerte[id] = Math.round(cfg.min + Math.random() * cfg.spread);
+    logLeft(`✅ ${getModuleName(id)} an`, 'conn');
+  }
+  renderModules();
+  updateStats();
+}
+
+function handleModuleClick(id) {
+  if (!modState.status[id]) {
+    logLeft(`⚠️ ${getModuleName(id)} ist aus`, 'conn');
+    return;
+  }
+  if (modState.selected === null) {
+    modState.selected = id;
+    logLeft(`🔗 ${getModuleName(id)} ausgewählt`, 'conn');
+    renderModules();
+    return;
+  }
+  if (modState.selected === id) {
+    modState.selected = null;
+    logLeft('↩️ Auswahl aufgehoben', 'conn');
+    renderModules();
+    return;
+  }
+
+  const a = modState.selected, b = id;
+  const idx = modState.connections.findIndex(c => (c.a === a && c.b === b) || (c.a === b && c.b === a));
+  if (idx >= 0) {
+    modState.connections.splice(idx, 1);
+    logLeft(`🔗 Verbindung ${getModuleName(a)} ↔ ${getModuleName(b)} getrennt`, 'conn');
+  } else {
+    modState.connections.push({ a, b });
+    logLeft(`🔗 Verbindung ${getModuleName(a)} ↔ ${getModuleName(b)} hergestellt`, 'conn');
+    modState.score += 5;
+  }
+  modState.selected = null;
+  renderModules();
+  updateStats();
+}
+
+function renderModules() {
+  const grid = dom.modulGrid;
+  grid.innerHTML = '';
+  MODULE_CONFIG.forEach(mod => {
+    const isOn = modState.status[mod.id];
+    const wert = modState.messwerte[mod.id] ?? 0;
+    const isSelected = modState.selected === mod.id;
+    const div = document.createElement('div');
+    div.className = 'modul' + (isSelected ? ' ausgewaehlt' : '');
+    div.innerHTML = `
+      <div class="icon">${mod.icon}</div>
+      <div class="name">${mod.name}</div>
+      <div class="status-tag ${mod.status}">${mod.status.toUpperCase()}</div>
+      <div class="messwert">${Math.round(wert)}%</div>
+      <div class="toggle-switch ${isOn ? 'on' : ''}"><div class="knob"></div></div>
+      <div class="conn-bar" id="conn-${mod.id}"></div>
+    `;
+    div.querySelector('.toggle-switch').addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleModule(mod.id);
+    });
+    div.addEventListener('click', (e) => {
+      if (e.target.closest('.toggle-switch')) return;
+      handleModuleClick(mod.id);
+    });
+    grid.appendChild(div);
+  });
+
+  // Verbindungsbalken
+  MODULE_CONFIG.forEach(mod => {
+    const el = document.getElementById(`conn-${mod.id}`);
+    if (!el) return;
+    const partners = modState.connections
+      .filter(c => c.a === mod.id || c.b === mod.id)
+      .map(c => getModuleName(c.a === mod.id ? c.b : c.a));
+    el.innerHTML = partners.length ? '🔗 ' + partners.join(' · ') : '';
+  });
+  updateStats();
+}
+
+function updateStats() {
+  const active = Object.values(modState.status).filter(Boolean).length;
+  const conns = modState.connections.length;
+  dom.connCount.textContent = conns;
+  dom.footerActive.textContent = active;
+  dom.footerConns.textContent = conns;
+  dom.footerScore.textContent = modState.score;
+  dom.ledConn.className = 'led ' + (conns > 0 ? 'on' : '');
+  dom.ledSystem.className = 'led ' + (active > 0 ? 'on' : 'off');
+}
+
+// ─── 10. SLIDER ──────────────────────────────────────────────────
+function setupSliders() {
+  const defs = [
+    { id: 'sliderAchse', key: 'achse', displayId: 'wertAchse' },
+    { id: 'sliderFluid', key: 'fluid', displayId: 'wertFluid' },
+    { id: 'sliderDs9', key: 'ds9', displayId: 'wertDs9' }
+  ];
+  defs.forEach(({ id, key, displayId }) => {
+    const input = document.getElementById(id);
+    const display = document.getElementById(displayId);
+    input.addEventListener('input', () => {
+      const val = parseInt(input.value, 10);
+      modState.params[key] = val;
+      display.textContent = val;
+      // Fluid: Gravitation anpassen
+      if (key === 'fluid') {
+        fluidState.gravStrength = val / 100;
+        logRight(`💧 Gravitation auf ${(val/100).toFixed(2)}`, 'fluid');
+      }
+      // DS9: Gold-Modus für Fluid
+      if (key === 'ds9') {
+        fluidState.ds9On = val > 50;
+        document.getElementById('ledFluid').className = 'led ' + (fluidState.ds9On ? 'pulse' : '');
+      }
+    });
+  });
+  fluidState.gravStrength = modState.params.fluid / 100;
+  fluidState.ds9On = modState.params.ds9 > 50;
+}
+
+// ─── 11. FLUID-STEUERUNG ────────────────────────────────────────
+function toggleSim() {
+  fluidState.running = !fluidState.running;
+  dom.btnSimStart.textContent = fluidState.running ? '⏸ STOP' : '▶ START';
+  dom.simStatus.textContent = fluidState.running ? '● läuft' : '⏸ pausiert';
+  dom.simStatus.style.color = fluidState.running ? '#8cf0d0' : '#ff6b6b';
+  logRight(fluidState.running ? '▶ Simulation gestartet' : '⏸ Simulation pausiert', 'fluid');
+}
+
+function addDrop() {
+  const x = W / 2 + (Math.random() - 0.5) * 80;
+  const y = 20 + Math.random() * 40;
+  spawnDrop(x, y, 10 + Math.random() * 16);
+  logRight('💧 Tropfen hinzugefügt', 'fluid');
+}
+
+function splitLargest() {
+  if (!fluidState.drops.length) return;
+  let maxIdx = 0;
+  for (let i = 1; i < fluidState.drops.length; i++) {
+    if (fluidState.drops[i].r > fluidState.drops[maxIdx].r) maxIdx = i;
+  }
+  if (splitDrop(maxIdx)) logRight('✂ größter Tropfen geteilt', 'fluid');
+  else logRight('… kein Tropfen groß genug', 'fluid');
+}
+
+function quake() {
+  fluidState.drops.forEach(d => {
+    d.vx += (Math.random() - 0.5) * 8;
+    d.vy += (Math.random() - 0.5) * 8 - 2;
+  });
+  logRight('⚡ QUAKE · alle Tropfen erschüttert', 'fluid');
+}
+
+function toggleMagnet() {
+  fluidState.magnetOn = !fluidState.magnetOn;
+  logRight(fluidState.magnetOn ? '🧲 MAGNET aktiv' : '🧲 MAGNET aus', 'fluid');
+}
+
+function resetFluid() {
+  initDrops(12);
+  fluidState.mergeCount = 0;
+  fluidState.splitCount = 0;
+  fluidState.magnetOn = false;
+  logRight('⟲ RESET · Fluid neu formatiert', 'fluid');
+}
+
+// ─── 12. INTERAKTION (Canvas) ──────────────────────────────────
+const canvasWrap = document.getElementById('canvasWrap');
+canvasWrap.addEventListener('mousemove', (e) => {
+  const rect = canvasWrap.getBoundingClientRect();
+  fluidState.mouse.x = e.clientX - rect.left;
+  fluidState.mouse.y = e.clientY - rect.top;
+  fluidState.mouse.active = true;
+});
+canvasWrap.addEventListener('mouseleave', () => {
+  fluidState.mouse.active = false;
+});
+canvasWrap.addEventListener('click', (e) => {
+  const rect = canvasWrap.getBoundingClientRect();
+  const x = e.clientX - rect.left, y = e.clientY - rect.top;
+  const idx = findDropAt(x, y);
+  if (idx >= 0) {
+    if (splitDrop(idx)) logRight('✂ Tropfen geteilt', 'fluid');
+    else logRight('… zu klein zum Teilen', 'fluid');
+  } else {
+    spawnDrop(x, y, 10 + Math.random() * 12);
+    logRight('💧 neuer Tropfen', 'fluid');
+  }
+});
+
+// ─── 13. TASTATUR ────────────────────────────────────────────────
+document.addEventListener('keydown', (e) => {
+  if (e.key === ' ') { e.preventDefault(); addDrop(); }
+  if (e.key === 's' || e.key === 'S') splitLargest();
+  if (e.key === 'q' || e.key === 'Q') quake();
+  if (e.key === 'm' || e.key === 'M') toggleMagnet();
+  if (e.key === 'x' || e.key === 'X') resetFluid();
+  if (e.key === '1') {
+    const mod = MODULE_CONFIG.find(m => m.id === 'api');
+    if (mod) toggleModule(mod.id);
+  }
+});
+
+// ─── 14. BUTTONS ──────────────────────────────────────────────────
+document.getElementById('btnSimStart').addEventListener('click', toggleSim);
+document.getElementById('btnAddDrop').addEventListener('click', addDrop);
+document.getElementById('btnSplitDrop').addEventListener('click', splitLargest);
+document.getElementById('btnQuake').addEventListener('click', quake);
+document.getElementById('btnToggleMagnet').addEventListener('click', toggleMagnet);
+document.getElementById('btnSimReset').addEventListener('click', resetFluid);
+
+// ─── 15. HAUPTSCHLEIFE ──────────────────────────────────────────
+function mainLoop() {
+  updateFluid();
+  requestAnimationFrame(mainLoop);
+}
+
+// ─── 16. INIT ────────────────────────────────────────────────────
+function init() {
+  resizeCanvas();
+  initDrops(14);
+  renderModules();
+  setupSliders();
+  updateStats();
+  logLeft('🔷 9 Module · Verbindungen · Score', 'conn');
+  logRight('💧 Fluid‑Engine mit echter Physik', 'fluid');
+  setTimeout(() => {
+    fluidState.running = true;
+    dom.btnSimStart.textContent = '⏸ STOP';
+    dom.simStatus.textContent = '● läuft';
+    dom.simStatus.style.color = '#8cf0d0';
+    logRight('▶ Auto‑Start · Fluid erwacht', 'fluid');
+  }, 400);
+  mainLoop();
+}
+
+init();
+</script>
 </body>
 </html>
