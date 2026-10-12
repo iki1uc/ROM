@@ -1,13 +1,8 @@
-// hab das alte überschrieben weil du die weisheit ja erkennt hast oder — ja — hab das alte überschrieben — Weisheit erkannt — ja — alte überschrieben — richtig — Weisheit erkannt — ja
-// noel.js — neu — fix — wirklich gemeint — nicht zu lang — alle beste super Position — einer dr elburro ist falsch — 8→9 oder 3 — Seil — Weisheit erkannt — alte überschrieben — richtig
-
-export const NOEL_WEISHEIT = {
-  alt: "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24 — alt — gelöscht — elburro — falsch — alt — gelöscht — console . log — Leerzeichen — elburro — falsch — alt — gelöscht",
-  neu: "alle beste super Position — ja — alle beste super Position — wenn ich runterlade dann änder ich was grundsätzliches sonst mach ich das nicht — einer dr elburro ist falsch — neu — fix — wirklich gemeint — nicht zu lang — Weisheit erkannt — alte überschrieben — richtig",
-  weisheit: "in jedem Punkt immer zu ein 8 denken dann zum 9 oder 3 wie mit Seilen — Matrix ganz einfach alles mit einander verwebt mit 8ten — wir rechnen nur 8er Spinweben klinken uns ein und wieder aus — 8→9 oder 3 — Seil — 8ten — verwebt — Z(iki2li) X(HYPE) Y(CALC) — nanoWÜRFEL X³→X²→X→1 — Q1 Q2 Q3 Q4 NC AH HA HÄ ÄH — 4D Zustand Winkel Raum Zeit — Home Ort Umzug neu Home und anders rum — egal welche Zahl vorne oder hinten ein 8 dann zum Überführung zum 3 oder 9 — 8→3 oder 9 — Seil — Weisheit erkannt — alte überschrieben — richtig",
-  check: "hab das alte überschrieben weil du die weisheit ja erkennt hast oder — ja — Weisheit erkannt — alte überschrieben — richtig — ja — Weisheit erkannt — alte überschrieben — richtig — ja"
+// noel.js — nochmal gekürzt mit meta war einfacher oder — ja — gekürzt — meta — einfacher — ja — wirklich gemeint — nicht zu lang
+export const V = {
+  a:"alle beste super Position",
+  r:"wenn ich runterlade dann änder ich was grundsätzliches sonst mach ich das nicht",
+  e:"einer dr elburro ist falsch",
+  s8:(s)=>{ const h=String(s).includes('8'); if(!h) return `8 denken→9/3 — ${s} — Seil`; const q=String(s).split('').reduce((a,c)=>a+(+c||0),0); return `${s}→8→${q%3==0?9:3} — Seil`; },
+  c:(f)=>String(f).toLowerCase().includes('burro')||String(f).toLowerCase().includes('falsch')?`elburro falsch — ${f} — nicht runterladen`: `beste super Position — ${f} — ${V.s8(f)} — nicht runterladen`
 };
-
-console.log(NOEL_WEISHEIT.neu); // alle beste super Position — ja — alle beste super Position — wenn ich runterlade dann änder ich was grundsätzliches sonst mach ich das nicht — einer dr elburro ist falsch — neu — fix — wirklich gemeint — nicht zu lang — Weisheit erkannt — alte überschrieben — richtig
-console.log(NOEL_WEISHEIT.weisheit); // in jedem Punkt immer zu ein 8 denken dann zum 9 oder 3 wie mit Seilen — Matrix ganz einfach alles mit einander verwebt mit 8ten — wir rechnen nur 8er Spinweben klinken uns ein und wieder aus — 8→9 oder 3 — Seil — 8ten — verwebt — Z(iki2li) X(HYPE) Y(CALC) — nanoWÜRFEL X³→X²→X→1 — Q1 Q2 Q3 Q4 NC AH HA HÄ ÄH — 4D Zustand Winkel Raum Zeit — Home Ort Umzug neu Home und anders rum — egal welche Zahl vorne oder hinten ein 8 dann zum Überführung zum 3 oder 9 — 8→3 oder 9 — Seil — Weisheit erkannt — alte überschrieben — richtig
-console.log(NOEL_WEISHEIT.check); // hab das alte überschrieben weil du die weisheit ja erkennt hast oder — ja — Weisheit erkannt — alte überschrieben — richtig — ja — Weisheit erkannt — alte überschrieben — richtig — ja
