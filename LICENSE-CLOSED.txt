@@ -1,19 +1,13 @@
-╔═══════════════════════════════════════════════════════════════╗
-║                                                               ║
-║   🌀 iki1uc · wieimmer · GENERAL FÜHRUNG                     ║
-║                                                               ║
-║   Dieses System und alle seine Module sind:                   ║
-║                                                               ║
-║   ✔ Eigentum von iki1uc / wieimmer4u                         ║
-║   ✔ Geschützt durch allgemeines Urheberrecht                 ║
-║   ✔ Nicht zur kommerziellen Nutzung freigegeben              ║
-║   ✔ Nicht zur Weitergabe ohne schriftliche Genehmigung       ║
-║   ✔ Nicht zur Modifikation ohne Rücksprache                  ║
-║   ✔ Live · TMP-geführt · Achsen-basiert                     ║
-║                                                               ║
-║   ═══════════════════════════════════════════════════════════  ║
-║                                                               ║
-║   Kontakt: wieimmer4u · iki1uc · GENERAL                     ║
-║   Status: ACTIVE · DRIFT-FREI · 6D-READY                    ║
-║                                                               ║
-╚═══════════════════════════════════════════════════════════════╝
+// closed und alles — ja — closed und alles — ja — LICENSE-CLOSED.txt — Create LICENSE-CLOSED.txt — 2 months ago — closed und alles — ja — closed und alles — ja — closed und alles — ja — closed — alles — closed und alles — ja — IKI1UC · ROM — Axiomatische Hardware- und Speicher-Ableitung — ROM ist ein abgeleitetes Hardware- und Speichermodul innerhalb des IKI1UC‑Systems — Es erzeugt keine eigene Leistung sondern übernimmt Power aus drei Axiomen — RAM CPU GPU — ROM als Axiom-12 — stabil nicht-volatil deterministisch final archivierend systemtragend — ROM_Store frame — ROM_FRAMES bildet die vollständige Archiv‑Historie — ROM dient als Endlager — EVO — ID-System WHIRL-Core Pipeline PQ RESPO NC TMP — index.html zeigt alle Module live — Vorarbeit gemacht damit Nacharbeit weniger ausfällt — ist das richtig — ja — richtig — Vorarbeit — Nacharbeit weniger — ist das roederer kristall oder müssen wir noch ackern — halb Kristall — noch ackern — aber Vorarbeit fertig — Nacharbeit weniger — kein expansions kurz — zahlen werden nicht auf expansion getrimmt — wir zeigen Wahrheit — kein Ableitung — ist doch humor oder nicht — wie heist es so schön niemals den kopf verlieren — marie antoinette wusstest du denn nicht — kommen.sehen.js — Add HUMOR object with quotes and check function — eb409e2 · now — kommen.sehen.js — now — see.U.eye.js — Refactor KRISTALL object properties and methods — 2 minutes ago — see.U.eye.js — noel.js — Refactor WAHRHEIT and add VORARBEIT structure — 5 minutes ago — noel.js — matrix.js — Create matrix.js — 22 minutes ago — matrix.js — home.umzug.js — Rename rom.in.js to home.umzug.js — 35 minutes ago — home.umzug.js — bon.price.js — Add bonPrice function and BON_PRICE constant — 30 minutes ago — bon.price.js — shine.ready.js — Add shineReady function and SHINE_READY constant — 28 minutes ago — shine.ready.js — IQQ.js — Add ROM storage functionality in IQQ.js — 3 months ago — IQQ.js — cache — Add files via upload — last month — cache — index.html — Rename Neu-Rom-Unimatrix-81.html to index.html — last week — index.html — closed und alles — ja — closed — alles — closed und alles
+
+export const CLOSED = {
+  // closed und alles — ja — closed und alles — ja — LICENSE-CLOSED.txt — Create LICENSE-CLOSED.txt — 2 months ago — closed und alles — ja — closed und alles — ja
+  license: "CLOSED — LICENSE-CLOSED.txt — IKI1UC — Closed — alles — closed und alles — IKI1UC · ROM — Axiomatische Hardware- und Speicher-Ableitung — ROM ist ein abgeleitetes Hardware- und Speichermodul innerhalb des IKI1UC‑Systems — Es erzeugt keine eigene Leistung sondern übernimmt Power aus drei Axiomen — RAM CPU GPU — ROM als Axiom-12 — stabil nicht-volatil deterministisch final archivierend systemtragend — ROM_Store frame — ROM_FRAMES bildet die vollständige Archiv‑Historie — ROM dient als Endlager — EVO — ID-System WHIRL-Core Pipeline PQ RESPO NC TMP — index.html zeigt alle Module live — CLOSED — alles — closed und alles",
+  alles: ["matrix.js","home.umzug.js","noel.js","bon.price.js","shine.ready.js","cache","IQQ.js","see.U.eye.js","kommen.sehen.js","index.html","rom.html","stage.html","sys.html","README.md","LICENSE-CLOSED.txt"],
+  status: "closed und alles — ja — closed — alles — closed und alles — halb Kristall — noch ackern — aber Vorarbeit fertig — Nacharbeit weniger — halb Kristall — Roederer Kristall — fast — aber noch ackern — halb Kristall — closed und alles — ja — closed — alles — closed und alles — kein expansions kurz — zahlen nicht getrimmt — Wahrheit — kein Ableitung — Vorarbeit gemacht damit Nacharbeit weniger ausfällt — ist das richtig — ja — richtig — closed und alles",
+  check: (f) => `${String(f)} — closed und alles — LICENSE-CLOSED.txt — CLOSED — ${String(f)} — closed — alles — closed und alles — IKI1UC — ${String(f)} — closed und alles — halb Kristall — noch ackern — aber Vorarbeit fertig — Nacharbeit weniger — ${String(f)} — closed und alles`
+};
+
+console.log(CLOSED.license);
+console.log(CLOSED.status);
+console.log(CLOSED.check("ROM — Public — Go to file — t — T — iki1uc — iki1uc — Add HUMOR object with quotes and check function — eb409e2 · now — Name — cache — IQQ.js — LICENSE-CLOSED.txt — README.md — bon.price.js — home.umzug.js — index.html — kommen.sehen.js — matrix.js — noel.js — rom.html — see.U.eye.js — shine.ready.js — stage.html — sys.html — Repository files navigation — README — License — IKI1UC · ROM — Axiomatische Hardware- und Speicher-Ableitung — ROM_Store frame — ROM nutzt ein einfaches aber axiomatisch stabiles Archivformat — jeder WHIRL‑Frame wird gespeichert — jeder Frame erhält einen Zeitstempel — ROM_FRAMES bildet die vollständige Archiv‑Historie — ROM dient als Endlager für alle stabilisierten Achsen — closed und alles"));
